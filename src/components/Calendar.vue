@@ -1,6 +1,5 @@
 <template>
   <div class="calendar">
-    <hello-world></hello-world>
     <v-container>
       <v-layout row wrap>
         <v-flex xs12 sm12 offset-md3 md6 offset-lg4 lg4 offset-xl4 xl4>
@@ -10,7 +9,7 @@
               :close-on-content-click="false"
               v-model="menu"
               :nudge-right="40"
-              :return-value.sync="date"
+              :return-value.sync="startingDate"
               lazy
               transition="scale-transition"
               offset-y
@@ -19,15 +18,15 @@
             >
               <v-text-field
                 slot="activator"
-                v-model="date"
+                v-model="startingDate"
                 label="Starting date"
                 prepend-icon="event"
                 readonly
               ></v-text-field>
-              <v-date-picker v-model="date" no-title scrollable>
+              <v-date-picker v-model="startingDate" no-title scrollable>
                 <v-spacer></v-spacer>
                 <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+                <v-btn flat color="primary" @click="$refs.menu.save(startingDate)">OK</v-btn>
               </v-date-picker>
             </v-menu>
             <v-text-field
@@ -35,6 +34,7 @@
               name="days"
               label="Number of days"
               type="Number"
+              v-model="daysNumber"
             >
             </v-text-field>
             <v-text-field
@@ -43,12 +43,24 @@
               label="Country code"
               mask="AA"
               type="String"
+              v-model="countryCode"
             >
             </v-text-field>
+            <v-btn
+              v-on:click="drawCalendar()"
+            >
+              Generate calendar!!!
+            </v-btn>
           </v-form>
         </v-flex>
-        <v-flex xs12 sm12 offset-md3 md6 offset-lg4 lg4 offset-xl4 xl4>
-          asdasd sad sa dsa dsa d sa asdasd sad sa dsa dsa d sa asdasd sad sa dsa dsa d sa asdasd sad sa dsa dsa d sa
+        <v-flex xs12 sm12 md12 lg12 xl12>
+          <month
+            day-name="Saturday"
+            :start-day="14"
+            :last-day="31"
+            month-name="JANUARY"
+          >
+          </month>
         </v-flex>
       </v-layout>
     </v-container>
@@ -56,18 +68,29 @@
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld'
+import CalendarMonth from '@/components/CalendarMonth'
+import moment from 'moment'
 
 export default {
   name: 'Calendar',
   components: {
-    'hello-world': HelloWorld
+    'month': CalendarMonth
   },
   data () {
     return {
-      date: null,
+      startingDate: null,
       menu: false,
-      msg: 'Calendar will be there'
+      countryCode: null,
+      daysNumber: null
+    }
+  },
+  methods: {
+    drawCalendar () {
+      this.daysNumber = 10
+      console.log(this.daysNumber)
+      console.log(this.countryCode)
+      console.log(this.startingDate)
+      return moment()
     }
   }
 }
