@@ -86,10 +86,23 @@ export default {
   },
   methods: {
     drawCalendar () {
-      this.daysNumber = 10
-      console.log(this.daysNumber)
-      console.log(this.countryCode)
-      console.log(this.startingDate)
+      let totalDays = this.daysNumber
+      let startDate = this.startingDate
+      while (totalDays > 0) {
+        const monthStart = moment(startDate, 'YYYY-MM-DD')
+        let monthEnd = moment(startDate, 'YYYY-MM-DD').endOf('month')
+        const daysInMonth = monthEnd.diff(monthStart, 'days') + 1
+        totalDays -= daysInMonth
+        console.log('=================================================')
+        console.log(totalDays)
+        console.log(monthEnd.format())
+        if (totalDays < 0) {
+          monthEnd.add(totalDays - 1, 'days')
+        }
+        monthEnd.add(1, 'days')
+        startDate = monthEnd
+        console.log(monthEnd.format())
+      }
       return moment()
     }
   }
