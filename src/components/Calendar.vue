@@ -55,10 +55,13 @@
         </v-flex>
         <v-flex xs12 sm12 md12 lg12 xl12>
           <month
-            day-name="Saturday"
-            :start-day="14"
-            :last-day="31"
-            month-name="JANUARY"
+            :key="month.monthName"
+            v-for="month of months"
+            :day-name="month.dayName"
+            :start-day="month.startDay"
+            :last-day="month.lastDay"
+            :month-name="month.monthName"
+            :year="month.year"
           >
           </month>
         </v-flex>
@@ -81,29 +84,48 @@ export default {
       startingDate: null,
       menu: false,
       countryCode: null,
-      daysNumber: null
+      daysNumber: null,
+      months: []
     }
   },
   methods: {
     drawCalendar () {
-      let totalDays = this.daysNumber
-      let startDate = this.startingDate
-      while (totalDays > 0) {
-        const monthStart = moment(startDate, 'YYYY-MM-DD')
-        let monthEnd = moment(startDate, 'YYYY-MM-DD').endOf('month')
-        const daysInMonth = monthEnd.diff(monthStart, 'days') + 1
-        totalDays -= daysInMonth
-        console.log('=================================================')
-        console.log(totalDays)
-        console.log(monthEnd.format())
-        if (totalDays < 0) {
-          monthEnd.add(totalDays - 1, 'days')
+      this.months.splice(0, this.months.length)
+      this.$nextTick(() => {
+        let totalDays = this.daysNumber - 1
+        let startDate = moment(this.startingDate, 'YYYY-MM-DD')
+        if (totalDays === 0) {
+          this.months.push({
+            dayName: startDate.format('dddd'),
+            startDay: +startDate.format('D'),
+            lastDay: +startDate.format('D'),
+            monthName: startDate.format('MMMM'),
+            year: startDate.format('YYYY')
+          })
         }
-        monthEnd.add(1, 'days')
-        startDate = monthEnd
-        console.log(monthEnd.format())
-      }
-      return moment()
+        while (totalDays > 0) {
+          const monthStart = startDate
+          let monthEnd = startDate.clone()
+          monthEnd.endOf('month')
+          let daysInMonth = monthEnd.diff(monthStart, 'days') + 1
+          if (totalDays - daysInMonth < 0) {
+            monthEnd = startDate.clone()
+            monthEnd.add(totalDays, 'days')
+            totalDays = 0
+          } else {
+            totalDays -= daysInMonth
+          }
+          this.months.push({
+            dayName: monthStart.format('dddd'),
+            startDay: +monthStart.format('D'),
+            lastDay: +monthEnd.format('D'),
+            monthName: monthStart.format('MMMM'),
+            year: monthStart.format('YYYY')
+          })
+          monthEnd.add(1, 'days')
+          startDate = monthEnd
+        }
+      })
     }
   }
 }

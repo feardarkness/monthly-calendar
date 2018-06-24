@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="month-name">
-      {{monthName}}
+      {{monthName}}-{{year}}
     </div>
     <div>
       <div
@@ -35,7 +35,8 @@ export default {
     dayName: String,
     startDay: Number,
     lastDay: Number,
-    monthName: String
+    monthName: String,
+    year: String
   },
   data () {
     return {
