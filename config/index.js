@@ -9,7 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/monthly-calendar/',
     proxyTable: {},
 
     // Various Dev Server settings
