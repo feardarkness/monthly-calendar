@@ -73,6 +73,7 @@ export default {
   width: 200px;
   box-shadow: 0 0 7px #212121;
   border-radius: 2px;
+  padding: 5px;
 }
 .day {
   width: 25px;

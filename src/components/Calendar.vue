@@ -2,7 +2,7 @@
   <div>
     <v-container grid-list-md>
       <v-layout>
-        <v-flex xs12 sm12 md6 lg6 xl6>
+        <v-flex xs12 sm12 md2 lg2 xl2>
           <v-menu
             ref="menu"
             :close-on-content-click="false"
@@ -20,7 +20,6 @@
               v-model="startingDate"
               label="Starting date"
               prepend-icon="event"
-              single-line
               readonly
             ></v-text-field>
             <v-date-picker v-model="startingDate" no-title scrollable>
@@ -30,20 +29,17 @@
             </v-date-picker>
           </v-menu>
         </v-flex>
-        <v-flex xs12 sm12 md6 lg6 xl6>
+        <v-flex xs12 sm12 md2 lg2 xl2>
           <v-text-field
             id="days"
             name="days"
             label="Number of days"
             type="Number"
-            single-line
             v-model="daysNumber"
           >
           </v-text-field>
         </v-flex>
-      </v-layout>
-      <v-layout row wrap>
-        <v-flex xs12 sm12 md6 lg6 xl6>
+        <v-flex xs12 sm12 md2 lg2 xl2>
           <v-text-field
             id="ccode"
             name="ccode"
@@ -54,7 +50,7 @@
           >
           </v-text-field>
         </v-flex>
-        <v-flex xs12 sm12 md6 lg6 xl6>
+        <v-flex xs12 sm12 md3 lg3 xl3>
           <v-btn
             v-on:click="drawCalendar()"
           >
