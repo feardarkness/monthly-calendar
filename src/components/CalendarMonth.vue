@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="month-name">
-      {{monthName}}-{{year}}
+      {{monthName}} - {{year}}
     </div>
     <div>
       <div
@@ -71,6 +71,7 @@ export default {
 <style scoped>
 .month {
   width: 200px;
+  box-shadow: 0 0 7px #212121;
 }
 .day {
   width: 25px;
@@ -83,12 +84,12 @@ export default {
   text-align: center;
 }
 .active {
-  background-color: grey;
+  background-color: #E0E0E0;
 }
 .weekend {
-  background-color: yellow;
+  background-color: #FDD835;
 }
 .weekday {
-  background-color: lawngreen;
+  background-color: #76FF03;
 }
 </style>

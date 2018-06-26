@@ -1,59 +1,69 @@
 <template>
-  <div class="calendar">
-    <v-container>
-      <v-layout row wrap>
-        <v-flex xs12 sm12 offset-md3 md6 offset-lg4 lg4 offset-xl4 xl4>
-          <v-form>
-            <v-menu
-              ref="menu"
-              :close-on-content-click="false"
-              v-model="menu"
-              :nudge-right="40"
-              :return-value.sync="startingDate"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="290px"
-            >
-              <v-text-field
-                slot="activator"
-                v-model="startingDate"
-                label="Starting date"
-                prepend-icon="event"
-                readonly
-              ></v-text-field>
-              <v-date-picker v-model="startingDate" no-title scrollable>
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                <v-btn flat color="primary" @click="$refs.menu.save(startingDate)">OK</v-btn>
-              </v-date-picker>
-            </v-menu>
+  <div>
+    <v-container grid-list-md>
+      <v-layout>
+        <v-flex xs12 sm12 md6 lg6 xl6>
+          <v-menu
+            ref="menu"
+            :close-on-content-click="false"
+            v-model="menu"
+            :nudge-right="40"
+            :return-value.sync="startingDate"
+            lazy
+            transition="scale-transition"
+            offset-y
+            full-width
+            min-width="290px"
+          >
             <v-text-field
-              id="days"
-              name="days"
-              label="Number of days"
-              type="Number"
-              v-model="daysNumber"
-            >
-            </v-text-field>
-            <v-text-field
-              id="ccode"
-              name="ccode"
-              label="Country code"
-              mask="AA"
-              type="String"
-              v-model="countryCode"
-            >
-            </v-text-field>
-            <v-btn
-              v-on:click="drawCalendar()"
-            >
-              Generate calendar!!!
-            </v-btn>
-          </v-form>
+              slot="activator"
+              v-model="startingDate"
+              label="Starting date"
+              prepend-icon="event"
+              single-line
+              readonly
+            ></v-text-field>
+            <v-date-picker v-model="startingDate" no-title scrollable>
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+              <v-btn flat color="primary" @click="$refs.menu.save(startingDate)">OK</v-btn>
+            </v-date-picker>
+          </v-menu>
         </v-flex>
-        <v-flex xs12 sm12 md12 lg12 xl12>
+        <v-flex xs12 sm12 md6 lg6 xl6>
+          <v-text-field
+            id="days"
+            name="days"
+            label="Number of days"
+            type="Number"
+            single-line
+            v-model="daysNumber"
+          >
+          </v-text-field>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex xs12 sm12 md6 lg6 xl6>
+          <v-text-field
+            id="ccode"
+            name="ccode"
+            label="Country code"
+            mask="AA"
+            type="String"
+            v-model="countryCode"
+          >
+          </v-text-field>
+        </v-flex>
+        <v-flex xs12 sm12 md6 lg6 xl6>
+          <v-btn
+            v-on:click="drawCalendar()"
+          >
+            Generate calendar!!!
+          </v-btn>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex xs12 sm12 md12 lg12 xl12 align-center justify-center>
           <month
             :key="month.monthName"
             v-for="month of months"
@@ -146,5 +156,10 @@ li {
 }
 a {
   color: #42b983;
+}
+.month {
+  display: inline-block;
+  margin: 10px;
+  vertical-align: top;
 }
 </style>
