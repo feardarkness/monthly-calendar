@@ -18,12 +18,17 @@
         :class="{
           active: day < 0,
           weekend: day > 0 && (indice % 7 === 0 || indice % 7 === 6),
-          weekday: day > 0 && indice % 7 !== 0 && indice % 7 !== 6
+          weekday: day > 0 && indice % 7 !== 0 && indice % 7 !== 6,
+          holiday: isHoliday(day)
         }"
         :key="day" v-for="(day, indice) in totalDays"
+        alt='aaaaaaaaaaaaaaaaaa'
       >
         {{day &lt; 0 ? '&nbsp;' : day}}
       </div>
+    </div>
+    <div>
+      <span class="holiday-list" :key="holiday.day" v-for="holiday in holidays">{{holiday.day}} - {{holiday.name}}<br></span>
     </div>
   </div>
 </template>
@@ -36,7 +41,8 @@ export default {
     startDay: Number,
     lastDay: Number,
     monthName: String,
-    year: String
+    year: String,
+    holidays: Array
   },
   data () {
     return {
@@ -60,14 +66,16 @@ export default {
     this.totalDays = this.totalDays.concat(extraEndDays)
   },
   methods: {
-    getDay: function (day) {
-      return day < 0 ? '      ' : day
+    isHoliday: function (day) {
+      if (day === -1) {
+        return false
+      }
+      return this.holidays.find(holiday => holiday.day === day) !== undefined
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .month {
   width: 200px;
@@ -93,5 +101,11 @@ export default {
 }
 .weekday {
   background-color: #76FF03;
+}
+.holiday {
+  background-color: blue !important;
+}
+.holiday-list {
+  font-size: 70%;
 }
 </style>
