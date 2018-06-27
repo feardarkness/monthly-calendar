@@ -190,7 +190,7 @@ export default {
                 lastDay: +startDate.format('D'),
                 monthName: startDate.format('MMMM'),
                 year: startDate.format('YYYY'),
-                holidays: holidays[startDate.format('MMMM')]
+                holidays: holidays[startDate.format('MMMM')].filter(holiday => holiday.day >= +startDate.format('D') && holiday.day <= +startDate.format('D'))
               })
             }
             while (totalDays > 0) {
@@ -211,7 +211,7 @@ export default {
                 lastDay: +monthEnd.format('D'),
                 monthName: monthStart.format('MMMM'),
                 year: monthStart.format('YYYY'),
-                holidays: holidays[startDate.format('MMMM')]
+                holidays: holidays[startDate.format('MMMM')].filter(holiday => holiday.day >= +startDate.format('D') && holiday.day <= +monthEnd.format('D'))
               })
               monthEnd.add(1, 'days')
               startDate = monthEnd

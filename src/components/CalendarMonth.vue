@@ -22,7 +22,6 @@
           holiday: isHoliday(day)
         }"
         :key="day" v-for="(day, indice) in totalDays"
-        alt='aaaaaaaaaaaaaaaaaa'
       >
         {{day &lt; 0 ? '&nbsp;' : day}}
       </div>
