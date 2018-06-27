@@ -7,8 +7,8 @@
           <li :key="error" v-for="error in errors">{{ error }}</li>
         </ul>
       </p>
-      <v-layout>
-        <v-flex xs12 sm12 md2 lg2 xl2>
+      <v-layout wrap>
+        <v-flex xs12 sm12 md12 lg2 xl2>
           <v-menu
             ref="menu"
             :close-on-content-click="false"
@@ -33,7 +33,7 @@
 
           </v-menu>
         </v-flex>
-        <v-flex xs12 sm12 md2 lg2 xl2>
+        <v-flex xs12 sm12 md12 lg2 xl2>
           <v-text-field
             id="days"
             name="days"
@@ -45,7 +45,7 @@
           >
           </v-text-field>
         </v-flex>
-        <v-flex xs12 sm12 md2 lg2 xl2>
+        <v-flex xs12 sm12 md12 lg2 xl2>
           <v-select
             :items="codes"
             id="ccode"
