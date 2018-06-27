@@ -102,7 +102,7 @@ export default {
   background-color: #76FF03;
 }
 .holiday {
-  background-color: blue !important;
+  background-color: #ff578a !important;
 }
 .holiday-list {
   font-size: 70%;
