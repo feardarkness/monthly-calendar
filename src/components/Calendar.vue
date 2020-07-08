@@ -1,6 +1,8 @@
 <template>
   <div>
     <v-container grid-list-md>
+      <p>The API used is now free only for the last year data, so... that's how it is working. Any date you pick, the year will be converted to last year. Also, seems like some country codes are not supported...</p>    
+      <p>Chose a date, a number of days, a country and the page will generate all holidays from the date you choose up to the number of days you typed.</p>
       <p v-if="errors.length">
         <b>Please fix the following error(s):</b>
         <ul>
@@ -38,8 +40,9 @@
             id="days"
             name="days"
             label="Number of days"
-            mask="#####"
+            mask="###"
             min="1"
+            max="365"
             v-model="daysNumber"
             :error-messages="errors.daysNumber"
           >
@@ -86,16 +89,16 @@
 </template>
 
 <script>
-import CalendarMonth from '@/components/CalendarMonth'
-import moment from 'moment'
-import axios from 'axios'
+import CalendarMonth from '@/components/CalendarMonth';
+import moment from 'moment';
+import axios from 'axios';
 
 export default {
   name: 'Calendar',
   components: {
-    'month': CalendarMonth
+    month: CalendarMonth
   },
-  data () {
+  data() {
     return {
       errors: {
         startingDate: [],
@@ -108,43 +111,61 @@ export default {
       countryCode: null,
       daysNumber: null,
       months: [],
-      monthsNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      monthsNames: [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+      ],
       codes: []
-    }
+    };
   },
-  mounted () {
-    axios.get('https://restcountries.eu/rest/v2/all?fields=alpha2Code')
-      .then((countryCodes) => {
-        this.codes = countryCodes.data.map(countryCode => countryCode.alpha2Code)
+  mounted() {
+    axios
+      .get('https://restcountries.eu/rest/v2/all?fields=alpha2Code')
+      .then(countryCodes => {
+        this.codes = countryCodes.data.map(
+          countryCode => countryCode.alpha2Code
+        );
       })
-      .catch((err) => {
-        console.error(err)
-        alert('Error fetching data')
-      })
+      .catch(err => {
+        console.error(err);
+        alert('Error fetching data');
+      });
   },
   methods: {
-    isValid () {
+    isValid() {
       this.errors = {
         startingDate: [],
         countryCode: [],
         daysNumber: []
-      }
-      let valid = true
+      };
+      let valid = true;
       if (!/\d{4}-\d{1,2}-\d{1,2}/.test(this.startingDate)) {
-        this.errors.startingDate = 'Starting date must have the format yyyy-mm-dd'
-        valid = false
+        this.errors.startingDate =
+          'Starting date must have the format yyyy-mm-dd';
+        valid = false;
       }
       if (!/\d{1,5}/.test(this.daysNumber) || this.daysNumber <= 0) {
-        this.errors.daysNumber = 'The number of days must be greater than 0'
-        valid = false
+        this.errors.daysNumber = 'The number of days must be greater than 0';
+        valid = false;
       }
       if (!/[A-Z]{2}/.test(this.countryCode)) {
-        this.errors.countryCode = 'The country code must be selected and with 2 characters length'
-        valid = false
+        this.errors.countryCode =
+          'The country code must be selected and it always should have 2 characters';
+        valid = false;
       }
-      return valid
+      return valid;
     },
-    makeHolidaysByMonth (holidays) {
+    makeHolidaysByMonth(holidays) {
       const months = {
         January: [],
         February: [],
@@ -158,31 +179,41 @@ export default {
         October: [],
         November: [],
         December: []
-      }
-      Object.keys(holidays).forEach(holidayDate => {
-        const [, month, day] = holidayDate.split('-')
-        const monthName = this.monthsNames[+month - 1]
+      };
+      holidays.forEach(holidayData => {
+        const holidayDate = holidayData.date;
+        const [, month, day] = holidayDate.split('-');
+        const monthName = this.monthsNames[+month - 1];
         months[monthName].push({
           day: +day,
-          name: holidays[holidayDate][0].name
-        })
-      })
-      return months
+          name: holidayData.name
+        });
+      });
+      return months;
     },
-    drawCalendar () {
+    drawCalendar() {
       if (!this.isValid()) {
-        return
+        return;
       }
-      this.months.splice(0, this.months.length)
-      axios.get(`https://holidayapi.com/v1/holidays?key=d08155cc-f5e5-4243-a95c-4287c34d471b&country=${this.countryCode}&year=2019&public=true`)
-        .then((holidaysResponse) => {
+      this.months.splice(0, this.months.length);
+      const yearMinusOne = moment().year() - 1;
+      axios
+        .get(
+          `https://holidayapi.com/v1/holidays?key=d08155cc-f5e5-4243-a95c-4287c34d471b&country=${
+            this.countryCode
+          }&year=${yearMinusOne}&public=true`
+        )
+        .then(holidaysResponse => {
           if (holidaysResponse.data.status !== '200') {
-            this.infoMessage = 'Country code not found in holiday API, plz try another one (CLUE: US)'
+            this.infoMessage =
+              'Country code not found in holiday API, plz try another one (CLUE: US)';
           }
-          const holidays = this.makeHolidaysByMonth(holidaysResponse.data.holidays)
+          const holidays = this.makeHolidaysByMonth(
+            holidaysResponse.data.holidays
+          );
           this.$nextTick(() => {
-            let totalDays = this.daysNumber - 1
-            let startDate = moment(this.startingDate, 'YYYY-MM-DD')
+            let totalDays = this.daysNumber - 1;
+            let startDate = moment(this.startingDate, 'YYYY-MM-DD');
             if (totalDays === 0) {
               this.months.push({
                 dayName: startDate.format('dddd'),
@@ -190,20 +221,24 @@ export default {
                 lastDay: +startDate.format('D'),
                 monthName: startDate.format('MMMM'),
                 year: startDate.format('YYYY'),
-                holidays: holidays[startDate.format('MMMM')].filter(holiday => holiday.day >= +startDate.format('D') && holiday.day <= +startDate.format('D'))
-              })
+                holidays: holidays[startDate.format('MMMM')].filter(
+                  holiday =>
+                    holiday.day >= +startDate.format('D') &&
+                    holiday.day <= +startDate.format('D')
+                )
+              });
             }
             while (totalDays > 0) {
-              const monthStart = startDate
-              let monthEnd = startDate.clone()
-              monthEnd.endOf('month')
-              let daysInMonth = monthEnd.diff(monthStart, 'days') + 1
+              const monthStart = startDate;
+              let monthEnd = startDate.clone();
+              monthEnd.endOf('month');
+              let daysInMonth = monthEnd.diff(monthStart, 'days') + 1;
               if (totalDays - daysInMonth < 0) {
-                monthEnd = startDate.clone()
-                monthEnd.add(totalDays, 'days')
-                totalDays = 0
+                monthEnd = startDate.clone();
+                monthEnd.add(totalDays, 'days');
+                totalDays = 0;
               } else {
-                totalDays -= daysInMonth
+                totalDays -= daysInMonth;
               }
               this.months.push({
                 dayName: monthStart.format('dddd'),
@@ -211,24 +246,29 @@ export default {
                 lastDay: +monthEnd.format('D'),
                 monthName: monthStart.format('MMMM'),
                 year: monthStart.format('YYYY'),
-                holidays: holidays[startDate.format('MMMM')].filter(holiday => holiday.day >= +startDate.format('D') && holiday.day <= +monthEnd.format('D'))
-              })
-              monthEnd.add(1, 'days')
-              startDate = monthEnd
+                holidays: holidays[startDate.format('MMMM')].filter(
+                  holiday =>
+                    holiday.day >= +startDate.format('D') &&
+                    holiday.day <= +monthEnd.format('D')
+                )
+              });
+              monthEnd.add(1, 'days');
+              startDate = monthEnd;
             }
-          })
+          });
         })
-        .catch((err) => {
-          console.log(err)
-          alert('Error fetching holiday data')
-        })
+        .catch(err => {
+          console.error(err);
+          alert('Error fetching holiday data');
+        });
     }
   }
-}
+};
 </script>
 
 <style scoped>
-h1, h2 {
+h1,
+h2 {
   font-weight: normal;
 }
 ul {
