@@ -174,7 +174,7 @@ export default {
         return
       }
       this.months.splice(0, this.months.length)
-      axios.get(`https://holidayapi.com/v1/holidays?key=d08155cc-f5e5-4243-a95c-4287c34d471b&country=${this.countryCode}&year=2017&public=true`)
+      axios.get(`https://holidayapi.com/v1/holidays?key=d08155cc-f5e5-4243-a95c-4287c34d471b&country=${this.countryCode}&year=2019&public=true`)
         .then((holidaysResponse) => {
           if (holidaysResponse.data.status !== '200') {
             this.infoMessage = 'Country code not found in holiday API, plz try another one (CLUE: US)'
