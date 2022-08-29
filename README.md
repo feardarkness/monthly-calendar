@@ -2,11 +2,11 @@
 
 > A monthly calendar
 
-Pick date, numbers of days and country code to draw the needed calendars.
+Picking date, numbers of days and country code the app will draw a calendar with the holidays of the country.
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
@@ -27,5 +27,3 @@ npm test
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-
-

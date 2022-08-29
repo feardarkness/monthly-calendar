@@ -1,8 +1,9 @@
 <template>
   <div>
     <v-container grid-list-md>
-      <p>The API used is now free only for the last year data, so... that's how it is working. Any date you pick, the year will be converted to last year. Also, seems like some country codes are not supported...</p>    
-      <p>Chose a date, a number of days, a country and the page will generate all holidays from the date you choose up to the number of days you typed.</p>
+      <p>The holiday API used is now free only for the last year data, so... that's how it is working. Any date you pick, the year will be converted to last year. Also, seems like some country codes are not supported in the free API.</p>
+      <p>Choose a date, a number of days, a country and the page will generate all holidays from the date you choose up to the number of days you typed.</p>
+      <p>Using two API's: https://restcountries.com/ and https://holidayapi.com</p>
       <p v-if="errors.length">
         <b>Please fix the following error(s):</b>
         <ul>
@@ -130,11 +131,9 @@ export default {
   },
   mounted() {
     axios
-      .get('https://restcountries.eu/rest/v2/all?fields=alpha2Code')
+      .get('https://restcountries.com/v3.1/all?fields=cca2')
       .then(countryCodes => {
-        this.codes = countryCodes.data.map(
-          countryCode => countryCode.alpha2Code
-        );
+        this.codes = countryCodes.data.map(countryCode => countryCode.cca2);
       })
       .catch(err => {
         console.error(err);
